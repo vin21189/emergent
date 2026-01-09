@@ -88,10 +88,15 @@ export default function ResultPage() {
             <div className="flex items-center gap-6 mb-6">
               <Globe size={48} className="text-primary" />
               <div>
-                <div className="text-sm font-semibold text-muted-foreground mb-2">PREDICTED COUNTRY</div>
+                <div className="text-sm font-semibold text-muted-foreground mb-2">LOCATION</div>
                 <div className="text-5xl font-light text-foreground" style={{ letterSpacing: '-0.02em' }} data-testid="predicted-country">
                   {result.predicted_country}
                 </div>
+                {result.city && (
+                  <div className="text-xl text-muted-foreground mt-2 font-medium" data-testid="predicted-city">
+                    {result.city}
+                  </div>
+                )}
               </div>
             </div>
 
