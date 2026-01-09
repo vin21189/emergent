@@ -115,6 +115,9 @@ export default function HistoryPage() {
                   <div className="flex-1">
                     <h3 className="text-base font-black text-foreground mb-1">{search.name}</h3>
                     <p className="text-xs text-muted-foreground font-medium">{search.hospital}</p>
+                    {search.specialty && (
+                      <p className="text-xs text-primary font-semibold mt-1">{search.specialty}</p>
+                    )}
                   </div>
                   <ArrowRight size={20} className="text-muted-foreground" />
                 </div>
