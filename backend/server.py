@@ -51,6 +51,7 @@ class DoctorSearchResult(BaseModel):
     hospital: str
     pubmed_topic: str
     predicted_country: str
+    city: Optional[str] = None
     confidence_score: float
     sources: List[str]
     reasoning: Optional[str] = None
