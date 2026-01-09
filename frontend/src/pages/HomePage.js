@@ -160,7 +160,7 @@ export default function HomePage() {
             {/* How it works */}
             <div className="stat-card bg-white p-8" data-testid="info-how-it-works">
               <div className="w-12 h-12 rounded-sm bg-primary/10 flex items-center justify-center mb-6">
-                <MagnifyingGlass size={24} weight="duotone" className="text-primary" />
+                <Search size={24} className="text-primary" />
               </div>
               <h3 className="text-lg font-black text-foreground mb-3">How It Works</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
