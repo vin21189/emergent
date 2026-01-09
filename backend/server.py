@@ -54,6 +54,9 @@ class DoctorSearchResult(BaseModel):
     confidence_score: float
     sources: List[str]
     reasoning: Optional[str] = None
+    is_doctor: bool = True
+    specialty: Optional[str] = None
+    public_profile_url: Optional[str] = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class BatchUploadResult(BaseModel):
