@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import HistoryPage from "./pages/HistoryPage";
 import ResultPage from "./pages/ResultPage";
 import { Toaster } from "@/components/ui/sonner";
-import { MagnifyingGlass, ClockCounterClockwise } from "phosphor-react";
+import { Search, Clock } from "lucide-react";
 
 function App() {
   return (
