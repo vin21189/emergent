@@ -94,7 +94,7 @@ export default function HistoryPage() {
 
         {searches.length === 0 ? (
           <div className="history-card bg-white p-16 text-center" data-testid="no-searches-message">
-            <MagnifyingGlass size={64} weight="thin" className="text-muted-foreground mx-auto mb-6" />
+            <Search size={64} className="text-muted-foreground mx-auto mb-6" />
             <h3 className="text-xl font-black text-foreground mb-3">No Searches Yet</h3>
             <p className="text-muted-foreground mb-8">Start by searching for a healthcare professional</p>
             <Link to="/" className="primary-button inline-block" data-testid="start-search-button">
