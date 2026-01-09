@@ -58,7 +58,7 @@ export default function ResultPage() {
           className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-primary transition-colors duration-300 mb-12"
           data-testid="back-to-history-link"
         >
-          <ArrowLeft size={18} weight="bold" />
+          <ArrowLeft size={18} />
           <span>Back to History</span>
         </Link>
 
