@@ -17,6 +17,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/result/:id" element={<ResultPage />} />
+          <Route path="/batch-import" element={<BatchImportPage />} />
         </Routes>
         <Toaster position="top-right" />
       </BrowserRouter>
