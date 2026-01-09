@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Globe, MagnifyingGlass, Hospital, EnvelopeSimple, User, BookOpen } from "phosphor-react";
+import { Globe, Search, Building2, Mail, User, BookOpen } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
