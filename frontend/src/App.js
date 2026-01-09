@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import HistoryPage from "./pages/HistoryPage";
 import ResultPage from "./pages/ResultPage";
+import BatchImportPage from "./pages/BatchImportPage";
 import { Toaster } from "@/components/ui/sonner";
-import { Search, Clock } from "lucide-react";
+import { Search, Clock, Upload } from "lucide-react";
 
 function App() {
   return (
