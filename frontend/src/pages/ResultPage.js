@@ -119,6 +119,54 @@ export default function ResultPage() {
             )}
           </div>
 
+          {/* Professional Details */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="result-card bg-white p-6" data-testid="doctor-verification">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center">
+                  <UserCheck size={20} className="text-primary" />
+                </div>
+                <div className="text-sm font-semibold text-muted-foreground">MEDICAL DOCTOR</div>
+              </div>
+              <div className="text-2xl font-black text-foreground">
+                {result.is_doctor ? 'Verified ✓' : 'Not Verified'}
+              </div>
+            </div>
+
+            <div className="result-card bg-white p-6" data-testid="specialty-info">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center">
+                  <Stethoscope size={20} className="text-primary" />
+                </div>
+                <div className="text-sm font-semibold text-muted-foreground">SPECIALTY</div>
+              </div>
+              <div className="text-xl font-black text-foreground">
+                {result.specialty || 'Not specified'}
+              </div>
+            </div>
+
+            <div className="result-card bg-white p-6" data-testid="profile-link">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-sm bg-primary/10 flex items-center justify-center">
+                  <ExternalLink size={20} className="text-primary" />
+                </div>
+                <div className="text-sm font-semibold text-muted-foreground">PUBLIC PROFILE</div>
+              </div>
+              {result.public_profile_url ? (
+                <a 
+                  href={result.public_profile_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-base font-semibold text-primary hover:underline flex items-center gap-2"
+                >
+                  View Profile <ExternalLink size={16} />
+                </a>
+              ) : (
+                <div className="text-base text-muted-foreground">Not available</div>
+              )}
+            </div>
+          </div>
+
           {/* Input Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div data-testid="detail-name">
