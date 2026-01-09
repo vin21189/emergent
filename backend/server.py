@@ -56,6 +56,13 @@ class DoctorSearchResult(BaseModel):
     reasoning: Optional[str] = None
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class BatchUploadResult(BaseModel):
+    total_processed: int
+    successful: int
+    failed: int
+    results: List[DoctorSearchResult]
+    errors: List[dict]
+
 # Services
 async def search_pubmed(author_name: str, topic: str) -> dict:
     """Search PubMed for author's publications and extract affiliation data."""
