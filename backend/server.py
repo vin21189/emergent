@@ -313,6 +313,76 @@ async def get_search_by_id(search_id: str):
         logger.error(f"Error fetching search: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.get("/export-history-excel")
+async def export_history_excel():
+    """Export search history as Excel file with all details."""
+    try:
+        from fastapi.responses import StreamingResponse
+        
+        # Fetch all searches
+        searches = await db.doctor_searches.find({}, {"_id": 0}).sort("timestamp", -1).to_list(1000)
+        
+        if not searches:
+            raise HTTPException(status_code=404, detail="No search history found")
+        
+        # Prepare data for Excel
+        data = []
+        for search in searches:
+            data.append({
+                'Name': search.get('name', ''),
+                'Email': search.get('email', ''),
+                'Hospital Affiliation': search.get('hospital', ''),
+                'PubMed Topic': search.get('pubmed_topic', ''),
+                'Predicted Country': search.get('predicted_country', ''),
+                'Confidence Score (%)': search.get('confidence_score', 0),
+                'Is Medical Doctor': 'Yes' if search.get('is_doctor', True) else 'No',
+                'Specialty': search.get('specialty', 'Not specified'),
+                'Public Profile URL': search.get('public_profile_url', 'Not available'),
+                'Reasoning': search.get('reasoning', ''),
+                'Data Sources': ', '.join(search.get('sources', [])),
+                'Date': search.get('timestamp', '')
+            })
+        
+        # Create DataFrame
+        df = pd.DataFrame(data)
+        
+        # Create Excel file in memory
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, sheet_name='HCP Search History', index=False)
+            
+            # Auto-adjust column widths
+            worksheet = writer.sheets['HCP Search History']
+            for column in worksheet.columns:
+                max_length = 0
+                column_letter = column[0].column_letter
+                for cell in column:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = min(max_length + 2, 50)
+                worksheet.column_dimensions[column_letter].width = adjusted_width
+        
+        output.seek(0)
+        
+        # Generate filename with timestamp
+        timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+        filename = f"geomed_hcp_history_{timestamp}.xlsx"
+        
+        return StreamingResponse(
+            output,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Excel export error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @api_router.post("/batch-upload", response_model=BatchUploadResult)
 async def batch_upload(file: UploadFile = File(...)):
     """Upload Excel file with multiple doctor records for batch processing."""
