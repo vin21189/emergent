@@ -33,7 +33,10 @@ export default function HistoryPage() {
       return;
     }
 
-    const headers = ["Name", "Email", "Hospital", "PubMed Topic", "Country", "Confidence", "Date"];
+    const headers = [
+      "Name", "Email", "Hospital", "PubMed Topic", "Country", "Confidence", 
+      "Is Doctor", "Specialty", "Public Profile", "Date"
+    ];
     const rows = searches.map(s => [
       s.name,
       s.email,
@@ -41,6 +44,9 @@ export default function HistoryPage() {
       s.pubmed_topic,
       s.predicted_country,
       `${s.confidence_score}%`,
+      s.is_doctor ? 'Yes' : 'No',
+      s.specialty || 'Not specified',
+      s.public_profile_url || 'Not available',
       new Date(s.timestamp).toLocaleDateString()
     ]);
 
@@ -53,10 +59,37 @@ export default function HistoryPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `geomed-searches-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `geomed-hcp-searches-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
-    toast.success("Export complete!");
+    toast.success("CSV export complete!");
+  };
+
+  const exportToExcel = async () => {
+    if (searches.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${API}/export-history-excel`, {
+        responseType: 'blob'
+      });
+      
+      const blob = new Blob([response.data], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `geomed-hcp-history-${new Date().toISOString().split('T')[0]}.xlsx`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success("Excel export complete!");
+    } catch (error) {
+      console.error("Excel export error:", error);
+      toast.error("Failed to export Excel file");
+    }
   };
 
   if (loading) {
