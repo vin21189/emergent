@@ -281,6 +281,7 @@ async def predict_country(input: DoctorSearchInput):
             hospital=input.hospital,
             pubmed_topic=input.pubmed_topic,
             predicted_country=ai_prediction["country"],
+            city=ai_prediction.get("city"),
             confidence_score=ai_prediction["confidence"],
             sources=sources,
             reasoning=ai_prediction["reasoning"],
