@@ -62,7 +62,7 @@ export default function HomePage() {
             <form onSubmit={handleSubmit} className="space-y-8" data-testid="search-form">
               <div>
                 <label htmlFor="name" className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <User size={18} weight="duotone" />
+                  <User size={18} />
                   Full Name
                 </label>
                 <input
