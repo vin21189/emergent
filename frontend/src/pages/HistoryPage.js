@@ -86,7 +86,7 @@ export default function HistoryPage() {
               className="primary-button flex items-center gap-2"
               data-testid="export-csv-button"
             >
-              <Export size={18} weight="bold" />
+              <FileText size={18} />
               <span>Export CSV</span>
             </button>
           )}
