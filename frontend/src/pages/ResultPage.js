@@ -154,7 +154,7 @@ export default function ResultPage() {
             <div data-testid="detail-pubmed-topic">
               <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-3">
                 <div className="w-8 h-8 rounded-sm bg-primary/10 flex items-center justify-center">
-                  <BookOpen size={16} weight="duotone" className="text-primary" />
+                  <BookOpen size={16} className="text-primary" />
                 </div>
                 PUBMED TOPIC
               </div>
