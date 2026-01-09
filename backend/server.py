@@ -476,6 +476,7 @@ async def batch_upload(file: UploadFile = File(...)):
                     hospital=hospital,
                     pubmed_topic=pubmed_topic,
                     predicted_country=ai_prediction["country"],
+                    city=ai_prediction.get("city"),
                     confidence_score=ai_prediction["confidence"],
                     sources=sources,
                     reasoning=ai_prediction["reasoning"],
