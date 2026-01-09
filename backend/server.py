@@ -125,7 +125,7 @@ async def predict_country_with_ai(name: str, email: str, hospital: str, topic: s
         
         # Prepare context for AI
         context = f"""
-Analyze the following information about a healthcare professional and predict their country of origin:
+Analyze the following information about a healthcare professional and provide detailed insights:
 
 Name: {name}
 Email: {email}
@@ -137,27 +137,36 @@ PubMed Data:
 - Number of publications: {pubmed_data.get('count', 0)}
 - Affiliations found: {', '.join(pubmed_data.get('affiliations', [])) if pubmed_data.get('affiliations') else 'None'}
 
-Based on:
-1. Hospital name and typical naming conventions
-2. Email domain patterns
-3. PubMed publication affiliations
-4. Research topic and regional research patterns
+Based on the above information, provide:
 
-Provide:
-1. Most likely country (just the country name)
-2. Confidence score (0-100)
-3. Brief reasoning (max 2 sentences)
+1. **Country**: Most likely country (just the country name)
+2. **Confidence**: Confidence score (0-100)
+3. **Reasoning**: Brief reasoning for country prediction (max 2 sentences)
+4. **Is Doctor**: Whether this person is a medical doctor (yes/no). Consider:
+   - Name prefix (Dr., MD, etc.)
+   - Hospital affiliation
+   - Medical research publications
+   - Medical specialty keywords
+5. **Specialty**: Medical specialty if identifiable (e.g., Cardiology, Oncology, Neuroscience, Endocrinology, Pediatrics, etc.). Use "General Practice" if unclear. Use the PubMed topic and research area to determine specialty.
+6. **Profile URL**: If you can infer a likely public profile URL (e.g., hospital staff page, LinkedIn, ResearchGate, Google Scholar), provide it. Format should be a realistic URL pattern like:
+   - Hospital staff directory: https://[hospital-domain]/staff/[name]
+   - Google Scholar: https://scholar.google.com/citations?user=[suggest searching]
+   - ResearchGate: https://www.researchgate.net/profile/[Name]
+   If unsure, respond with "Not found"
 
 Format your response EXACTLY as:
 COUNTRY: [country name]
 CONFIDENCE: [number]
 REASONING: [reasoning]
+IS_DOCTOR: [yes/no]
+SPECIALTY: [specialty name]
+PROFILE_URL: [URL or "Not found"]
 """
         
         chat = LlmChat(
             api_key=api_key,
             session_id=f"country-predict-{uuid.uuid4()}",
-            system_message="You are a geographic and institutional analysis expert. Analyze healthcare professional data to predict their country accurately."
+            system_message="You are a medical professional analyzer and geographic expert. Analyze healthcare professional data to predict their country, verify medical credentials, identify specialties, and suggest profile URLs accurately."
         ).with_model("openai", "gpt-5.2")
         
         message = UserMessage(text=context)
@@ -168,6 +177,9 @@ REASONING: [reasoning]
         country = "Unknown"
         confidence = 50.0
         reasoning = "Unable to determine with high confidence"
+        is_doctor = True
+        specialty = None
+        profile_url = None
         
         for line in lines:
             if line.startswith("COUNTRY:"):
@@ -179,11 +191,25 @@ REASONING: [reasoning]
                     confidence = 50.0
             elif line.startswith("REASONING:"):
                 reasoning = line.replace("REASONING:", "").strip()
+            elif line.startswith("IS_DOCTOR:"):
+                is_doctor_str = line.replace("IS_DOCTOR:", "").strip().lower()
+                is_doctor = is_doctor_str in ['yes', 'true', 'y']
+            elif line.startswith("SPECIALTY:"):
+                specialty = line.replace("SPECIALTY:", "").strip()
+                if specialty.lower() in ['none', 'unknown', 'n/a', '']:
+                    specialty = None
+            elif line.startswith("PROFILE_URL:"):
+                profile_url = line.replace("PROFILE_URL:", "").strip()
+                if profile_url.lower() in ['not found', 'none', 'unknown', 'n/a', '']:
+                    profile_url = None
         
         return {
             "country": country,
             "confidence": confidence,
-            "reasoning": reasoning
+            "reasoning": reasoning,
+            "is_doctor": is_doctor,
+            "specialty": specialty,
+            "profile_url": profile_url
         }
     
     except Exception as e:
@@ -191,7 +217,10 @@ REASONING: [reasoning]
         return {
             "country": "Unknown",
             "confidence": 0.0,
-            "reasoning": f"Error during prediction: {str(e)}"
+            "reasoning": f"Error during prediction: {str(e)}",
+            "is_doctor": True,
+            "specialty": None,
+            "profile_url": None
         }
 
 # Routes
