@@ -68,7 +68,7 @@ export default function ResultPage() {
           <div className="flex items-start justify-between mb-12">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <CheckCircle size={32} weight="duotone" className="text-success" />
+                <CheckCircle size={32} className="text-success" />
                 <h1 className="text-3xl font-black text-foreground">Country Identified</h1>
               </div>
               <p className="text-sm text-muted-foreground font-medium">
