@@ -86,7 +86,7 @@ export default function ResultPage() {
           {/* Country & Confidence */}
           <div className="bg-primary/5 p-8 rounded-sm mb-12" data-testid="prediction-summary">
             <div className="flex items-center gap-6 mb-6">
-              <Globe size={48} weight="duotone" className="text-primary" />
+              <Globe size={48} className="text-primary" />
               <div>
                 <div className="text-sm font-semibold text-muted-foreground mb-2">PREDICTED COUNTRY</div>
                 <div className="text-5xl font-light text-foreground" style={{ letterSpacing: '-0.02em' }} data-testid="predicted-country">
