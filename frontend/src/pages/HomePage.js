@@ -146,7 +146,7 @@ export default function HomePage() {
                     </>
                   ) : (
                     <>
-                      <Globe size={20} weight="bold" />
+                      <Globe size={20} />
                       <span>Predict Country</span>
                     </>
                   )}
