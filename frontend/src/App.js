@@ -30,7 +30,7 @@ export const Header = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3" data-testid="logo-link">
             <div className="w-10 h-10 rounded-sm bg-primary flex items-center justify-center">
-              <MagnifyingGlass size={24} weight="bold" color="white" />
+              <Search size={24} color="white" />
             </div>
             <div>
               <h1 className="text-2xl font-black text-foreground" style={{ letterSpacing: '-0.02em' }}>GeoMed AI</h1>
