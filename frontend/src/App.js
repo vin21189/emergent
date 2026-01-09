@@ -43,7 +43,7 @@ export const Header = () => {
               className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300"
               data-testid="nav-search-link"
             >
-              <MagnifyingGlass size={20} weight="regular" />
+              <Search size={20} />
               <span>Search</span>
             </Link>
             <Link
@@ -51,7 +51,7 @@ export const Header = () => {
               className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300"
               data-testid="nav-history-link"
             >
-              <ClockCounterClockwise size={20} weight="regular" />
+              <Clock size={20} />
               <span>History</span>
             </Link>
           </nav>
