@@ -147,7 +147,7 @@ export default function HomePage() {
                   ) : (
                     <>
                       <Globe size={20} />
-                      <span>Predict Country</span>
+                      <span>Get HCP Details</span>
                     </>
                   )}
                 </button>
