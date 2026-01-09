@@ -116,7 +116,7 @@ export default function HomePage() {
 
               <div>
                 <label htmlFor="pubmed_topic" className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <BookOpen size={18} weight="duotone" />
+                  <BookOpen size={18} />
                   PubMed Article Topic
                 </label>
                 <input
