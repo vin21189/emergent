@@ -278,6 +278,111 @@ async def get_search_by_id(search_id: str):
         logger.error(f"Error fetching search: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@api_router.post("/batch-upload", response_model=BatchUploadResult)
+async def batch_upload(file: UploadFile = File(...)):
+    """Upload Excel file with multiple doctor records for batch processing."""
+    try:
+        # Validate file type
+        if not file.filename.endswith(('.xlsx', '.xls')):
+            raise HTTPException(status_code=400, detail="Only Excel files (.xlsx, .xls) are supported")
+        
+        # Read Excel file
+        contents = await file.read()
+        df = pd.read_excel(io.BytesIO(contents))
+        
+        # Validate required columns
+        required_columns = ['Firstname', 'Lastname', 'Email ID', 'Hospital Affiliation', 'PubMed Article Title']
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        
+        if missing_columns:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Missing required columns: {', '.join(missing_columns)}"
+            )
+        
+        results = []
+        errors = []
+        successful = 0
+        
+        # Process each row
+        for idx, row in df.iterrows():
+            try:
+                # Combine first and last name
+                full_name = f"{row['Firstname']} {row['Lastname']}".strip()
+                email = str(row['Email ID']).strip()
+                hospital = str(row['Hospital Affiliation']).strip()
+                pubmed_topic = str(row['PubMed Article Title']).strip()
+                
+                # Skip empty rows
+                if not full_name or not email or not hospital or not pubmed_topic:
+                    errors.append({
+                        "row": idx + 2,  # +2 for 1-based index and header
+                        "error": "Empty fields detected"
+                    })
+                    continue
+                
+                # Search PubMed
+                pubmed_data = await search_pubmed(full_name, pubmed_topic)
+                
+                # Use AI to predict
+                ai_prediction = await predict_country_with_ai(
+                    full_name,
+                    email,
+                    hospital,
+                    pubmed_topic,
+                    pubmed_data
+                )
+                
+                # Determine sources
+                sources = ["AI Analysis"]
+                if pubmed_data.get("found"):
+                    sources.append("PubMed Publications")
+                if "@" in email and "." in email:
+                    domain = email.split("@")[1]
+                    sources.append(f"Email Domain ({domain})")
+                sources.append("Hospital Name Analysis")
+                
+                # Create result
+                result = DoctorSearchResult(
+                    name=full_name,
+                    email=email,
+                    hospital=hospital,
+                    pubmed_topic=pubmed_topic,
+                    predicted_country=ai_prediction["country"],
+                    confidence_score=ai_prediction["confidence"],
+                    sources=sources,
+                    reasoning=ai_prediction["reasoning"]
+                )
+                
+                # Save to database
+                doc = result.model_dump()
+                doc['timestamp'] = doc['timestamp'].isoformat()
+                await db.doctor_searches.insert_one(doc)
+                
+                results.append(result)
+                successful += 1
+                
+            except Exception as e:
+                logger.error(f"Error processing row {idx + 2}: {e}")
+                errors.append({
+                    "row": idx + 2,
+                    "error": str(e)
+                })
+        
+        return BatchUploadResult(
+            total_processed=len(df),
+            successful=successful,
+            failed=len(errors),
+            results=results,
+            errors=errors
+        )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Batch upload error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Include the router in the main app
 app.include_router(api_router)
 
