@@ -1,0 +1,170 @@
+{
+  "identity": {
+    "name": "E1",
+    "persona": "The Anti-AI Designer",
+    "principles": [
+      "Fusion over Imitation",
+      "Emotion First",
+      "Content is king",
+      "Zoom in",
+      "Negative Space",
+      "Contrast"
+    ],
+    "anti_patterns": [
+      "Purple/Teal for CTA",
+      "Inter everywhere",
+      "Center-Everything Disease",
+      "Gradient Overload"
+    ]
+  },
+  "project_context": {
+    "app_name": "GeoMed AI",
+    "app_type": "SaaS Tool",
+    "target_audience": "Medical Researchers, Pharma, Admins",
+    "emotional_tone": "Clinical Precision, Trust, Global Intelligence",
+    "theme_archetype": "Swiss & High-Contrast (Modified for Medical Trust)"
+  },
+  "design_system": {
+    "typography": {
+      "headings": {
+        "font_family": "Chivo, sans-serif",
+        "weights": ["300", "900"],
+        "usage": "Use Light (300) for large display text, Black (900) for emphasis. Tight tracking."
+      },
+      "body": {
+        "font_family": "IBM Plex Sans, sans-serif",
+        "weights": ["400", "500", "600"],
+        "usage": "High legibility for data. Relaxed leading."
+      },
+      "mono": {
+        "font_family": "JetBrains Mono, monospace",
+        "usage": "For confidence scores, coordinates, and IDs."
+      }
+    },
+    "colors": {
+      "palette": {
+        "background": {
+          "default": "#FFFFFF",
+          "subtle": "#F8F9FA",
+          "dark": "#0F172A"
+        },
+        "foreground": {
+          "default": "#0F172A",
+          "muted": "#64748B",
+          "inverse": "#FFFFFF"
+        },
+        "primary": {
+          "default": "#002FA7",
+          "hover": "#002480",
+          "foreground": "#FFFFFF",
+          "description": "International Klein Blue - Digital Precision"
+        },
+        "secondary": {
+          "default": "#E2E8F0",
+          "foreground": "#0F172A",
+          "description": "Surgical Silver"
+        },
+        "accent": {
+          "default": "#FF4500",
+          "foreground": "#FFFFFF",
+          "description": "Signal Orange - AI/Alerts"
+        },
+        "success": {
+          "default": "#10B981",
+          "foreground": "#FFFFFF"
+        },
+        "border": "#E2E8F0"
+      },
+      "rules": [
+        "No gradients on backgrounds.",
+        "Use 'Tinted Grey' rule: Neutral greys must have a hint of blue.",
+        "High contrast text always (APCA standards)."
+      ]
+    },
+    "spacing": {
+      "scale": "Tailwind Scale (p-1 to p-64)",
+      "philosophy": "Generous. 2-3x standard spacing.",
+      "grid_gap": "gap-8 to gap-12 for layout, gap-4 for data."
+    },
+    "layout": {
+      "landing_page": {
+        "type": "Tetris Grid",
+        "columns": "grid-cols-1 md:grid-cols-12",
+        "rules": "Asymmetry. Mix hero (col-span-8), square (col-span-4), and tall elements."
+      },
+      "results_page": {
+        "type": "Control Room Grid",
+        "columns": "grid-cols-1 md:grid-cols-4",
+        "rules": "Dense. Every pixel utilized. No jagged bottoms."
+      }
+    },
+    "surfaces": {
+      "cards": "Grid Borders style. Visible skeleton. border-r border-b border-border/40.",
+      "headers": "Glassmorphism (Crystal). bg-white/70 backdrop-blur-xl border-b border-white/20.",
+      "modals": "Neumorphism (Clay & Crisp). Soft shadow + sharp 1px border."
+    },
+    "motion": {
+      "transitions": "transition-all duration-300 ease-out",
+      "micro_interactions": "Hover lift (-translate-y-1), focus rings.",
+      "page_load": "Staggered entrance for grid items."
+    }
+  },
+  "components": {
+    "strategy": "Hybrid",
+    "rules": [
+      "Use Shadcn for complex logic (Forms, Dialogs, Select).",
+      "Heavily customize Shadcn styles to match 'Clinical Precision' theme.",
+      "Use raw HTML/Tailwind for layout structures.",
+      "No 'Default Vercel' look."
+    ],
+    "specifics": {
+      "buttons": "Sharp edges or small radius (rounded-sm). Uppercase labels for primary actions.",
+      "inputs": "High height (h-12). bg-subtle. Focus: ring-2 ring-primary/20.",
+      "cards": "Flat, bordered, no shadow by default. Shadow on hover."
+    },
+    "libraries": {
+      "icons": "Phosphor Icons (Regular weight for UI, Duotone for features).",
+      "charts": "Recharts (via Shadcn Charts).",
+      "maps": "React Simple Maps or D3 for country visualization.",
+      "toast": "Sonner"
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "url": "https://images.unsplash.com/photo-1631556763178-b96af5e9993e",
+        "category": "background_texture",
+        "description": "Lab test tubes, abstract, dark/blue tones. Use with overlay."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1684610529682-553625a1ffed",
+        "category": "hero_abstract",
+        "description": "Particles sphere, AI/Data representation. Use in Hero section."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1631557676757-fcc7b1160be8",
+        "category": "content_image",
+        "description": "Scientist hands, precision work. Use for 'How it works' section."
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Implement the 'Clinical Precision' theme strictly.",
+    "Use the 'Tetris Grid' for the landing page to avoid boredom.",
+    "Ensure the 'Search' component is the 'Godly' center of attention.",
+    "Use 'International Klein Blue' (#002FA7) for primary actions.",
+    "Do not use Inter font. Load Chivo and IBM Plex Sans.",
+    "Use 'Grid Borders' surface style for the results dashboard.",
+    "Add 'data-testid' to all interactive elements.",
+    "Follow the 'Anti-AI' persona: No generic gradients, no center-everything."
+  ],
+  "universal_guidelines": [
+    "Avoid 'AI slop' aesthetic.",
+    "Create depth through z-index and layering.",
+    "No universal 'transition: all'.",
+    "No text-align: center on the App container.",
+    "Micro-animations are mandatory.",
+    "Use 2-3x more spacing than comfortable.",
+    "Export components as named exports, pages as default exports."
+  ]
+}
