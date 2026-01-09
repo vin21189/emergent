@@ -80,7 +80,7 @@ export default function HomePage() {
 
               <div>
                 <label htmlFor="email" className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <EnvelopeSimple size={18} weight="duotone" />
+                  <Mail size={18} />
                   Email Address
                 </label>
                 <input
