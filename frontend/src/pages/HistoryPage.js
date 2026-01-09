@@ -116,7 +116,7 @@ export default function HistoryPage() {
                     <h3 className="text-base font-black text-foreground mb-1">{search.name}</h3>
                     <p className="text-xs text-muted-foreground font-medium">{search.hospital}</p>
                   </div>
-                  <ArrowRight size={20} weight="bold" className="text-muted-foreground" />
+                  <ArrowRight size={20} className="text-muted-foreground" />
                 </div>
 
                 <div className="space-y-3">
