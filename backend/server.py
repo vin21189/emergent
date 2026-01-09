@@ -386,7 +386,10 @@ async def batch_upload(file: UploadFile = File(...)):
                     predicted_country=ai_prediction["country"],
                     confidence_score=ai_prediction["confidence"],
                     sources=sources,
-                    reasoning=ai_prediction["reasoning"]
+                    reasoning=ai_prediction["reasoning"],
+                    is_doctor=ai_prediction.get("is_doctor", True),
+                    specialty=ai_prediction.get("specialty"),
+                    public_profile_url=ai_prediction.get("profile_url")
                 )
                 
                 # Save to database
