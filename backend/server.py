@@ -139,23 +139,36 @@ PubMed Data:
 
 Based on the above information, provide:
 
-1. **Country**: Most likely country (just the country name)
-2. **Confidence**: Confidence score (0-100)
-3. **Reasoning**: Brief reasoning for country prediction (max 2 sentences)
-4. **Is Doctor**: Whether this person is a medical doctor (yes/no). Consider:
-   - Name prefix (Dr., MD, etc.)
+1. **Country**: Most likely country. IMPORTANT: If UK/United Kingdom, specify the constituent country:
+   - England (if in London, Manchester, Birmingham, Oxford, Cambridge, etc.)
+   - Scotland (if in Edinburgh, Glasgow, Aberdeen, etc.)
+   - Wales (if in Cardiff, Swansea, etc.)
+   - Northern Ireland (if in Belfast, etc.)
+   For other countries, provide the country name as normal (e.g., "United States", "Japan", "Germany")
+
+2. **City**: If identifiable from hospital name or email, specify the city (e.g., "London", "Edinburgh", "Manchester"). If not identifiable, respond with "Not specified"
+
+3. **Confidence**: Confidence score (0-100)
+
+4. **Reasoning**: Brief reasoning for location prediction (max 2 sentences)
+
+5. **Is Doctor**: Whether this person is a medical doctor (yes/no). Consider:
+   - Name prefix (Dr., MD, Prof., etc.)
    - Hospital affiliation
    - Medical research publications
    - Medical specialty keywords
-5. **Specialty**: Medical specialty if identifiable (e.g., Cardiology, Oncology, Neuroscience, Endocrinology, Pediatrics, etc.). Use "General Practice" if unclear. Use the PubMed topic and research area to determine specialty.
-6. **Profile URL**: If you can infer a likely public profile URL (e.g., hospital staff page, LinkedIn, ResearchGate, Google Scholar), provide it. Format should be a realistic URL pattern like:
+
+6. **Specialty**: Medical specialty if identifiable (e.g., Cardiology, Oncology, Neuroscience, Endocrinology, Pediatrics, etc.). Use "General Practice" if unclear. Use the PubMed topic and research area to determine specialty.
+
+7. **Profile URL**: If you can infer a likely public profile URL (e.g., hospital staff page, LinkedIn, ResearchGate, Google Scholar), provide it. Format should be a realistic URL pattern like:
    - Hospital staff directory: https://[hospital-domain]/staff/[name]
    - Google Scholar: https://scholar.google.com/citations?user=[suggest searching]
    - ResearchGate: https://www.researchgate.net/profile/[Name]
    If unsure, respond with "Not found"
 
 Format your response EXACTLY as:
-COUNTRY: [country name]
+COUNTRY: [country name - e.g., "England" not "United Kingdom" if in England]
+CITY: [city name or "Not specified"]
 CONFIDENCE: [number]
 REASONING: [reasoning]
 IS_DOCTOR: [yes/no]
@@ -166,7 +179,7 @@ PROFILE_URL: [URL or "Not found"]
         chat = LlmChat(
             api_key=api_key,
             session_id=f"country-predict-{uuid.uuid4()}",
-            system_message="You are a medical professional analyzer and geographic expert. Analyze healthcare professional data to predict their country, verify medical credentials, identify specialties, and suggest profile URLs accurately."
+            system_message="You are a medical professional analyzer and geographic expert. When analyzing UK-based professionals, always specify the constituent country (England, Scotland, Wales, or Northern Ireland) rather than just 'United Kingdom'. Analyze healthcare professional data to predict their specific location, verify medical credentials, identify specialties, and suggest profile URLs accurately."
         ).with_model("openai", "gpt-5.2")
         
         message = UserMessage(text=context)
@@ -175,6 +188,7 @@ PROFILE_URL: [URL or "Not found"]
         # Parse response
         lines = response.strip().split('\n')
         country = "Unknown"
+        city = None
         confidence = 50.0
         reasoning = "Unable to determine with high confidence"
         is_doctor = True
@@ -184,6 +198,10 @@ PROFILE_URL: [URL or "Not found"]
         for line in lines:
             if line.startswith("COUNTRY:"):
                 country = line.replace("COUNTRY:", "").strip()
+            elif line.startswith("CITY:"):
+                city = line.replace("CITY:", "").strip()
+                if city.lower() in ['not specified', 'unknown', 'n/a', '']:
+                    city = None
             elif line.startswith("CONFIDENCE:"):
                 try:
                     confidence = float(line.replace("CONFIDENCE:", "").strip())
@@ -205,6 +223,7 @@ PROFILE_URL: [URL or "Not found"]
         
         return {
             "country": country,
+            "city": city,
             "confidence": confidence,
             "reasoning": reasoning,
             "is_doctor": is_doctor,
@@ -216,6 +235,7 @@ PROFILE_URL: [URL or "Not found"]
         logger.error(f"AI prediction error: {e}")
         return {
             "country": "Unknown",
+            "city": None,
             "confidence": 0.0,
             "reasoning": f"Error during prediction: {str(e)}",
             "is_doctor": True,
