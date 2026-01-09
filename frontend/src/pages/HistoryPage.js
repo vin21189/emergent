@@ -114,14 +114,24 @@ export default function HistoryPage() {
             </p>
           </div>
           {searches.length > 0 && (
-            <button
-              onClick={exportToCSV}
-              className="primary-button flex items-center gap-2"
-              data-testid="export-csv-button"
-            >
-              <FileText size={18} />
-              <span>Export CSV</span>
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={exportToExcel}
+                className="primary-button flex items-center gap-2"
+                data-testid="export-excel-button"
+              >
+                <FileText size={18} />
+                <span>Export Excel</span>
+              </button>
+              <button
+                onClick={exportToCSV}
+                className="px-6 py-3 border-2 border-border text-foreground font-semibold rounded-sm hover:border-primary transition-colors duration-300 flex items-center gap-2"
+                data-testid="export-csv-button"
+              >
+                <FileText size={18} />
+                <span>Export CSV</span>
+              </button>
+            </div>
           )}
         </div>
 
