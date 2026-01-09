@@ -49,6 +49,14 @@ export const Header = () => {
               <span>Search</span>
             </Link>
             <Link
+              to="/batch-import"
+              className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300"
+              data-testid="nav-batch-link"
+            >
+              <Upload size={20} />
+              <span>Batch Import</span>
+            </Link>
+            <Link
               to="/history"
               className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors duration-300"
               data-testid="nav-history-link"
